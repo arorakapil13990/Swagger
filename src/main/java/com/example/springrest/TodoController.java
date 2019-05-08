@@ -3,8 +3,11 @@ package com.example.springrest;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -73,12 +76,15 @@ public class TodoController {
 	}
 	
 	
-	@RequestMapping("/{name}/addTodo")
-	public Todo add(@PathVariable String name , @RequestBody Todo todo){
+	@GetMapping("/{name}/addTodo")
+	public ResponseEntity<?> add(@PathVariable String name , @RequestBody Todo todo){
+		
 		if(todo.getDesc() == null) {
-			ResponseEntity.noContent().build();
+			return new ResponseEntity<>("Description required!", HttpStatus.BAD_REQUEST);
+			//ResponseEntity.noContent().build();
 		}
-		return addTodo(name,todo);
+		return new ResponseEntity<Todo>(addTodo(name,todo), HttpStatus.OK);
+		//return addTodo(name,todo);
 	}
 	
 	
